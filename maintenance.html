@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מחלקת תחזוקה - מערכת ניהול מפעל</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .maintenance-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1e4d92;
+            margin: 0.5rem 0;
+        }
+
+        /* Charts Grid */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            height: 300px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 220px;
+            width: 100%;
+        }
+
+        /* Issue List */
+        .issue-list {
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        .issue-item {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .issue-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .issue-title {
+            display: flex;
+            align-items: center;
+        }
+
+        .issue-details {
+            margin: 0 1rem;
+        }
+
+        .priority-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.875rem;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .priority-high { background: #ffebee; color: #d32f2f; }
+        .priority-medium { background: #fff3e0; color: #f57c00; }
+        .priority-low { background: #e8f5e9; color: #2e7d32; }
+
+        /* Buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            min-width: 100px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .btn-handle {
+            background: #1e4d92;
+            color: white;
+            margin-left: 0.5rem;
+        }
+
+        .btn-view {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Section Headers */
+        .section-header {
+            color: #1e4d92;
+            margin: 2rem 0 1rem;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-card {
+                height: 250px;
+            }
+            
+            .chart-container {
+                height: 170px;
+            }
+
+            .issue-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .issue-actions {
+                margin-top: 1rem;
+                display: flex;
+                width: 100%;
+            }
+
+            .btn {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-container">
+                <img src="images/logo.jpg" alt="לוגו החברה">
+                <h1>מחלקת תחזוקה</h1>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="home.html">דף הבית</a>
+            <a href="production.html">ייצור</a>
+            <a href="maintenance.html" class="active">תחזוקה</a>
+            <a href="marketing.html">שיווק</a>
+            <a href="reports.html">דוחות</a>
+            <a href="tasks.html">משימות</a>
+        </div>
+    </nav>
+
+    <main class="maintenance-container">
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>תקלות פעילות</h3>
+                <div class="stat-value">8</div>
+                <p>2 בעדיפות גבוהה</p>
+            </div>
+            <div class="stat-card">
+                <h3>זמן תגובה ממוצע</h3>
+                <div class="stat-value">15</div>
+                <p>דקות</p>
+            </div>
+            <div class="stat-card">
+                <h3>תקלות שטופלו</h3>
+                <div class="stat-value">24</div>
+                <p>היום</p>
+            </div>
+            <div class="stat-card">
+                <h3>יעילות טיפול</h3>
+                <div class="stat-value">92%</div>
+                <p>בחודש האחרון</p>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="chart-grid">
+            <div class="chart-card">
+                <h3>סוגי תקלות</h3>
+                <div class="chart-container">
+                    <canvas id="issuesChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>זמני טיפול</h3>
+                <div class="chart-container">
+                    <canvas id="responseTimeChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Issues -->
+        <h2 class="section-header">תקלות פעילות</h2>
+        <div class="issue-list">
+            <div class="issue-item">
+                <div class="issue-header">
+                    <div class="issue-title">
+                        <span class="priority-badge priority-high">דחוף</span>
+                        <div class="issue-details">
+                            <h3>תקלה במכונת ייצור 4</h3>
+                            <p>נדרשת החלפת חלק. המכונה מושבתת.</p>
+                        </div>
+                    </div>
+                    <div class="issue-actions">
+                        <button class="btn btn-handle">טפל עכשיו</button>
+                        <button class="btn btn-view">צפה בפרטים</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="issue-item">
+                <div class="issue-header">
+                    <div class="issue-title">
+                        <span class="priority-badge priority-medium">בינוני</span>
+                        <div class="issue-details">
+                            <h3>רעש חריג במסוע 2</h3>
+                            <p>נדרשת בדיקה ותחזוקה מונעת</p>
+                        </div>
+                    </div>
+                    <div class="issue-actions">
+                        <button class="btn btn-handle">טפל עכשיו</button>
+                        <button class="btn btn-view">צפה בפרטים</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="issue-item">
+                <div class="issue-header">
+                    <div class="issue-title">
+                        <span class="priority-badge priority-low">קל</span>
+                        <div class="issue-details">
+                            <h3>בדיקת מערכת קירור</h3>
+                            <p>תחזוקה שוטפת נדרשת</p>
+                        </div>
+                    </div>
+                    <div class="issue-actions">
+                        <button class="btn btn-handle">טפל עכשיו</button>
+                        <button class="btn btn-view">צפה בפרטים</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scheduled Maintenance -->
+        <h2 class="section-header">תחזוקה מתוכננת להיום</h2>
+        <div class="issue-list">
+            <div class="issue-item">
+                <div class="issue-header">
+                    <div class="issue-title">
+                        <div class="issue-details">
+                            <h3>תחזוקה שוטפת - מכונה 1</h3>
+                            <p>10:00 - טיפול תקופתי</p>
+                        </div>
+                    </div>
+                    <div class="issue-actions">
+                        <button class="btn btn-handle">התחל טיפול</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="issue-item">
+                <div class="issue-header">
+                    <div class="issue-title">
+                        <div class="issue-details">
+                            <h3>החלפת חלקים - מסוע 3</h3>
+                            <p>13:00 - תחזוקה מונעת</p>
+                        </div>
+                    </div>
+                    <div class="issue-actions">
+                        <button class="btn btn-handle">התחל טיפול</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // סוגי תקלות - גרף עוגה
+        const issuesCtx = document.getElementById('issuesChart').getContext('2d');
+        new Chart(issuesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['מכני', 'חשמלי', 'תוכנה', 'אחר'],
+                datasets: [{
+                    data: [40, 25, 20, 15],
+                    backgroundColor: [
+                        '#1e4d92',
+                        '#1e88e5',
+                        '#64b5f6',
+                        '#bbdefb'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 15,
+                            font: { size: 11 }
+                        }
+                    }
+                }
+            }
+        });
+
+        // זמני תגובה - גרף עמודות
+        const responseCtx = document.getElementById('responseTimeChart').getContext('2d');
+        new Chart(responseCtx, {
+            type: 'bar',
+            data: {
+                labels: ['8:00', '10:00', '12:00', '14:00', '16:00'],
+                datasets: [{
+                    label: 'זמן תגובה (דקות)',
+                    data: [12, 15, 10, 18, 14],
+                    backgroundColor: '#1e88e5'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 15,
+                            font: { size: 11 }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: { size: 10 }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: { size: 10 }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

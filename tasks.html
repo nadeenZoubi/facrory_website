@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משימות - מערכת ניהול מפעל</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .tasks-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Filters Section */
+        .filters-section {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .filter-group {
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1e4d92;
+            margin: 0.5rem 0;
+        }
+
+        /* Kanban Board */
+        .kanban-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .kanban-column {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .column-header {
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #eee;
+            color: #1e4d92;
+        }
+
+        .task-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-right: 4px solid;
+        }
+
+        .task-production { border-right-color: #1976d2; }
+        .task-maintenance { border-right-color: #f57c00; }
+        .task-marketing { border-right-color: #2e7d32; }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.875rem;
+        }
+
+        .badge-production { background: #e3f2fd; color: #1976d2; }
+        .badge-maintenance { background: #fff3e0; color: #f57c00; }
+        .badge-marketing { background: #e8f5e9; color: #2e7d32; }
+
+        .task-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        /* Add Task Button */
+        .add-task-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #1e4d92;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .add-task-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .kanban-board {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-container">
+                <img src="images/logo.jpg" alt="לוגו החברה">
+                <h1>משימות</h1>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="home.html">דף הבית</a>
+            <a href="production.html">ייצור</a>
+            <a href="maintenance.html">תחזוקה</a>
+            <a href="marketing.html">שיווק</a>
+            <a href="reports.html">דוחות</a>
+            <a href="tasks.html" class="active">משימות</a>
+        </div>
+    </nav>
+
+    <main class="tasks-container">
+        <!-- Filters -->
+        <div class="filters-section">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>מחלקה</label>
+                    <select>
+                        <option value="">כל המחלקות</option>
+                        <option value="production">ייצור</option>
+                        <option value="maintenance">תחזוקה</option>
+                        <option value="marketing">שיווק</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>דחיפות</label>
+                    <select>
+                        <option value="">הכל</option>
+                        <option value="high">גבוהה</option>
+                        <option value="medium">בינונית</option>
+                        <option value="low">נמוכה</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>תאריך יעד</label>
+                    <input type="date">
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>משימות פעילות</h3>
+                <div class="stat-value">12</div>
+                <p>3 בעדיפות גבוהה</p>
+            </div>
+            <div class="stat-card">
+                <h3>הושלמו השבוע</h3>
+                <div class="stat-value">28</div>
+                <p>↑ 15% משבוע שעבר</p>
+            </div>
+            <div class="stat-card">
+                <h3>זמן ממוצע לביצוע</h3>
+                <div class="stat-value">2.5</div>
+                <p>ימים</p>
+            </div>
+            <div class="stat-card">
+                <h3>יעילות ביצוע</h3>
+                <div class="stat-value">94%</div>
+                <p>בחודש האחרון</p>
+            </div>
+        </div>
+
+        <!-- Kanban Board -->
+        <div class="kanban-board">
+            <div class="kanban-column">
+                <h2 class="column-header">לביצוע</h2>
+                <div class="task-card task-production">
+                    <div class="task-header">
+                        <span class="task-badge badge-production">ייצור</span>
+                        <span>27/01/2025</span>
+                    </div>
+                    <h3>השלמת הזמנה #12345</h3>
+                    <p>ייצור 1000 יחידות למשלוח דחוף</p>
+                    <div class="task-footer">
+                        <span>אחראי: יוסי כהן</span>
+                        <span>דחיפות: גבוהה</span>
+                    </div>
+                </div>
+
+                <div class="task-card task-maintenance">
+                    <div class="task-header">
+                        <span class="task-badge badge-maintenance">תחזוקה</span>
+                        <span>28/01/2025</span>
+                    </div>
+                    <h3>תחזוקת מכונה 3</h3>
+                    <p>טיפול תקופתי ובדיקת תקינות</p>
+                    <div class="task-footer">
+                        <span>אחראי: דני לוי</span>
+                        <span>דחיפות: בינונית</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kanban-column">
+                <h2 class="column-header">בתהליך</h2>
+                <div class="task-card task-marketing">
+                    <div class="task-header">
+                        <span class="task-badge badge-marketing">שיווק</span>
+                        <span>27/01/2025</span>
+                    </div>
+                    <h3>הכנת דוח מכירות</h3>
+                    <p>סיכום נתוני מכירות חודשיים</p>
+                    <div class="task-footer">
+                        <span>אחראי: מיכל דוד</span>
+                        <span>דחיפות: רגילה</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kanban-column">
+                <h2 class="column-header">הושלם</h2>
+                <div class="task-card task-production">
+                    <div class="task-header">
+                        <span class="task-badge badge-production">ייצור</span>
+                        <span>26/01/2025</span>
+                    </div>
+                    <h3>בדיקת איכות</h3>
+                    <p>בדיקת איכות למשלוח #5678</p>
+                    <div class="task-footer">
+                        <span>אחראי: רונית לוי</span>
+                        <span>הושלם: 16:30</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Task Button -->
+        <button class="add-task-btn">+</button>
+    </main>
+
+    <script>
+        // Drag and Drop functionality can be added here
+        // Additional task management logic can be implemented
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>התחברות - מערכת ניהול מפעל</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-container">
+                <img src="images/logo.jpg" alt="לוגו החברה">
+                <h1>מערכת ניהול מפעל</h1>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="auth-container">
+            <div class="auth-header">
+                <h2>התחברות למערכת</h2>
+                <p>הזן את פרטי ההתחברות שלך</p>
+            </div>
+            
+            <form onsubmit="return handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">שם משתמש</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">סיסמה</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">התחבר</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>אין לך חשבון? <a href="register.html">הירשם עכשיו</a></p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+            // כאן יהיה הטיפול בהתחברות
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // לוגיקת התחברות
+            console.log('מתחבר...', { username, password });
+            
+            // הפניה לדף הבית לאחר התחברות מוצלחת
+            window.location.href = 'home.html';
+            return false;
+        }
+    </script>
+</body>
+</html>
