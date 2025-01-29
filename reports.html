@@ -154,6 +154,27 @@
             height: 300px;
             margin-bottom: 2rem;
         }
+              /* Add Task Button */
+              .add-task-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #1e4d92;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .add-task-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
 
         @media (max-width: 768px) {
             .filters-grid {
@@ -314,6 +335,7 @@
         <div class="chart-container">
             <canvas id="reportsChart"></canvas>
         </div>
+        <button class="add-task-btn">+</button>
     </main>
 
     <script>
@@ -378,12 +400,7 @@
                 }
             }
         });
-                // Add Report Button Click Handler
-                document.querySelector('.add-report-btn').addEventListener('click', function() {
-            // Add your logic here for handling the new report creation
-            console.log('Add new report clicked');
-            // You could open a modal or redirect to a new report form
-        });
+               
 
     </script>
 </body>
