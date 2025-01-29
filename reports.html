@@ -7,13 +7,13 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Existing styles */
         .reports-container {
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 2rem;
         }
 
+        /* Search and Filter Section */
         .filters-section {
             background: white;
             border-radius: 10px;
@@ -48,6 +48,7 @@
             font-size: 0.9rem;
         }
 
+        /* Summary Cards */
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -70,6 +71,7 @@
             margin: 0.5rem 0;
         }
 
+        /* Reports Table */
         .reports-table {
             background: white;
             border-radius: 10px;
@@ -106,6 +108,7 @@
             background: #f8f9fa;
         }
 
+        /* Action Buttons */
         .btn-group {
             display: flex;
             gap: 0.5rem;
@@ -146,35 +149,10 @@
         .department-maintenance { background: #fff3e0; color: #f57c00; }
         .department-marketing { background: #e8f5e9; color: #2e7d32; }
 
+        /* Chart Container */
         .chart-container {
             height: 300px;
             margin-bottom: 2rem;
-        }
-
-        /* New Add Button Styles */
-        .add-report-btn {
-            position: fixed;
-            bottom: 2rem;
-            left: 2rem;
-            background: #1e4d92;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            font-size: 2rem;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .add-report-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
 
         @media (max-width: 768px) {
@@ -189,11 +167,10 @@
     </style>
 </head>
 <body>
-    <!-- Existing Header and Nav sections remain the same -->
     <header>
         <div class="header-content">
             <div class="logo-container">
-                <img src="logo.jpg" alt="לוגו החברה">
+                <img src="images/logo.jpg" alt="לוגו החברה">
                 <h1>דוחות מערכת</h1>
             </div>
         </div>
@@ -210,16 +187,137 @@
         </div>
     </nav>
 
-    <main class="reports-container">
-        <!-- Existing content remains the same -->
-        <!-- ... (all the existing sections) ... -->
 
-        <!-- Add Report Button -->
-        <button class="add-report-btn" title="הוסף דוח חדש">+</button>
+
+    <main class="reports-container">
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>מחלקה</label>
+                    <select>
+                        <option value="">כל המחלקות</option>
+                        <option value="production">ייצור</option>
+                        <option value="maintenance">תחזוקה</option>
+                        <option value="marketing">שיווק</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>סוג דוח</label>
+                    <select>
+                        <option value="">כל הדוחות</option>
+                        <option value="daily">יומי</option>
+                        <option value="weekly">שבועי</option>
+                        <option value="monthly">חודשי</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>מתאריך</label>
+                    <input type="date">
+                </div>
+                <div class="filter-group">
+                    <label>עד תאריך</label>
+                    <input type="date">
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="summary-grid">
+            <div class="summary-card">
+                <h3>סה"כ דוחות</h3>
+                <div class="summary-value">156</div>
+                <p>החודש</p>
+            </div>
+            <div class="summary-card">
+                <h3>דוחות ייצור</h3>
+                <div class="summary-value">64</div>
+                <p>41% מהסה"כ</p>
+            </div>
+            <div class="summary-card">
+                <h3>דוחות תחזוקה</h3>
+                <div class="summary-value">48</div>
+                <p>31% מהסה"כ</p>
+            </div>
+            <div class="summary-card">
+                <h3>דוחות שיווק</h3>
+                <div class="summary-value">44</div>
+                <p>28% מהסה"כ</p>
+            </div>
+        </div>
+
+        <!-- Reports Table -->
+        <div class="reports-table">
+            <div class="table-header">
+                <h2>דוחות אחרונים</h2>
+                <div class="btn-group">
+                    <button class="btn btn-primary">ייצא לאקסל</button>
+                    <button class="btn btn-secondary">ייצא ל-PDF</button>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>שם הדוח</th>
+                        <th>מחלקה</th>
+                        <th>סוג</th>
+                        <th>תאריך</th>
+                        <th>יוצר</th>
+                        <th>פעולות</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>דוח ייצור יומי</td>
+                        <td><span class="department-badge department-production">ייצור</span></td>
+                        <td>יומי</td>
+                        <td>25/01/2025</td>
+                        <td>ישראל ישראלי</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-secondary">צפה</button>
+                                <button class="btn btn-download">הורד</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>דוח תקלות שבועי</td>
+                        <td><span class="department-badge department-maintenance">תחזוקה</span></td>
+                        <td>שבועי</td>
+                        <td>24/01/2025</td>
+                        <td>יעקב יעקובי</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-secondary">צפה</button>
+                                <button class="btn btn-download">הורד</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>דוח מכירות חודשי</td>
+                        <td><span class="department-badge department-marketing">שיווק</span></td>
+                        <td>חודשי</td>
+                        <td>23/01/2025</td>
+                        <td>שרה כהן</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-secondary">צפה</button>
+                                <button class="btn btn-download">הורד</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-container">
+            <canvas id="reportsChart"></canvas>
+        </div>
     </main>
 
     <script>
-        // Existing Chart.js script remains the same
+        // Reports Distribution Chart
         const ctx = document.getElementById('reportsChart').getContext('2d');
         new Chart(ctx, {
             type: 'line',
@@ -280,13 +378,13 @@
                 }
             }
         });
-
-        // Add Report Button Click Handler
-        document.querySelector('.add-report-btn').addEventListener('click', function() {
+                // Add Report Button Click Handler
+                document.querySelector('.add-report-btn').addEventListener('click', function() {
             // Add your logic here for handling the new report creation
             console.log('Add new report clicked');
             // You could open a modal or redirect to a new report form
         });
+
     </script>
 </body>
 </html>
