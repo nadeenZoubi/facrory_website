@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דוחות - מערכת ניהול מפעל</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .reports-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Search and Filter Section */
+        .filters-section {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .filter-group {
+            margin-bottom: 1rem;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1e4d92;
+            margin: 0.5rem 0;
+        }
+
+        /* Reports Table */
+        .reports-table {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: right;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #1e4d92;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Action Buttons */
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #1e4d92;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .btn-download {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .department-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .department-production { background: #e3f2fd; color: #1976d2; }
+        .department-maintenance { background: #fff3e0; color: #f57c00; }
+        .department-marketing { background: #e8f5e9; color: #2e7d32; }
+
+        /* Chart Container */
+        .chart-container {
+            height: 300px;
+            margin-bottom: 2rem;
+        }
+              /* Add Task Button */
+              .add-task-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #1e4d92;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .add-task-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reports-table {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-container">
+                <img src="images/logo.jpg" alt="לוגו החברה">
+                <h1>דוחות מערכת</h1>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="home.html">דף הבית</a>
+            <a href="production.html">ייצור</a>
+            <a href="maintenance.html">תחזוקה</a>
+            <a href="marketing.html">שיווק</a>
+            <a href="reports.html" class="active">דוחות</a>
+            <a href="tasks.html">משימות</a>
+        </div>
+    </nav>
+
+
+
+    <main class="reports-container">
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>מחלקה</label>
+                    <select>
+                        <option value="">כל המחלקות</option>
+                        <option value="production">ייצור</option>
+                        <option value="maintenance">תחזוקה</option>
+                        <option value="marketing">שיווק</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>סוג דוח</label>
+                    <select>
+                        <option value="">כל הדוחות</option>
+                        <option value="daily">יומי</option>
+                        <option value="weekly">שבועי</option>
+                        <option value="monthly">חודשי</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>מתאריך</label>
+                    <input type="date">
+                </div>
+                <div class="filter-group">
+                    <label>עד תאריך</label>
+                    <input type="date">
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="summary-grid">
+            <div class="summary-card">
+                <h3>סה"כ דוחות</h3>
+                <div class="summary-value">156</div>
+                <p>החודש</p>
+            </div>
+            <div class="summary-card">
+                <h3>דוחות ייצור</h3>
+                <div class="summary-value">64</div>
+                <p>41% מהסה"כ</p>
+            </div>
+            <div class="summary-card">
+                <h3>דוחות תחזוקה</h3>
+                <div class="summary-value">48</div>
+                <p>31% מהסה"כ</p>
+            </div>
+            <div class="summary-card">
+                <h3>דוחות שיווק</h3>
+                <div class="summary-value">44</div>
+                <p>28% מהסה"כ</p>
+            </div>
+        </div>
+
+        <!-- Reports Table -->
+        <div class="reports-table">
+            <div class="table-header">
+                <h2>דוחות אחרונים</h2>
+                <div class="btn-group">
+                    <button class="btn btn-primary">ייצא לאקסל</button>
+                    <button class="btn btn-secondary">ייצא ל-PDF</button>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>שם הדוח</th>
+                        <th>מחלקה</th>
+                        <th>סוג</th>
+                        <th>תאריך</th>
+                        <th>יוצר</th>
+                        <th>פעולות</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>דוח ייצור יומי</td>
+                        <td><span class="department-badge department-production">ייצור</span></td>
+                        <td>יומי</td>
+                        <td>25/01/2025</td>
+                        <td>ישראל ישראלי</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-secondary">צפה</button>
+                                <button class="btn btn-download">הורד</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>דוח תקלות שבועי</td>
+                        <td><span class="department-badge department-maintenance">תחזוקה</span></td>
+                        <td>שבועי</td>
+                        <td>24/01/2025</td>
+                        <td>יעקב יעקובי</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-secondary">צפה</button>
+                                <button class="btn btn-download">הורד</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>דוח מכירות חודשי</td>
+                        <td><span class="department-badge department-marketing">שיווק</span></td>
+                        <td>חודשי</td>
+                        <td>23/01/2025</td>
+                        <td>שרה כהן</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-secondary">צפה</button>
+                                <button class="btn btn-download">הורד</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-container">
+            <canvas id="reportsChart"></canvas>
+        </div>
+        <button class="add-task-btn">+</button>
+    </main>
+
+    <script>
+        // Reports Distribution Chart
+        const ctx = document.getElementById('reportsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['ינו', 'פבר', 'מרץ', 'אפר', 'מאי', 'יונ'],
+                datasets: [
+                    {
+                        label: 'ייצור',
+                        data: [45, 52, 48, 64, 58, 64],
+                        borderColor: '#1976d2',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'תחזוקה',
+                        data: [38, 42, 35, 48, 42, 48],
+                        borderColor: '#f57c00',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'שיווק',
+                        data: [32, 38, 42, 36, 40, 44],
+                        borderColor: '#2e7d32',
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 15,
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 10
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 10
+                            }
+                        }
+                    }
+                }
+            }
+        });
+               
+
+    </script>
+</body>
+</html>
